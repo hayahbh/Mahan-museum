@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Mahan Museum</title>
+<meta name="description" content="The Mahan Museum. Inktober 2026, twenty rooms opened one at a time.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%96%BC%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ceil:#140809; --wall-hi:#72202E; --wall:#5C1824; --wall-lo:#360C14;
+  --floor-hi:#2A1B19; --floor:#171010; --skirt:#1A0F10;
+  --velvet-1:#3A0B13; --velvet-2:#661726; --velvet-3:#8A2536;
+  --gold:#C6A76A; --gold-hi:#EEDDB0; --gold-lo:#7A6232; --gold-deep:#4E3D1D;
+  --paper:#F4EFE7; --paper-ink:#2A1A1C; --paper-soft:#7D6A64;
+  --chrome:#140608; --chrome-ink:#EDE3D3; --chrome-soft:#A8988A;
+  --light:rgba(255,226,178,.26); --light-hi:rgba(255,236,200,.5);
+  --display:"Cormorant Garamond","Cormorant","Garamond","Times New Roman",serif;
+  --sans:"Jost","Futura","Avenir Next","Segoe UI",sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){ --wall-hi:#7C2432; --wall:#661B28; --wall-lo:#3E0E17; --light:rgba(255,228,182,.24); }
+}
+:root[data-theme="light"]{ --wall-hi:#7C2432; --wall:#661B28; --wall-lo:#3E0E17; --light:rgba(255,228,182,.24); }
+:root[data-theme="dark"]{ --wall-hi:#72202E; --wall:#5C1824; --wall-lo:#360C14; --light:rgba(255,226,178,.26); }
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0;height:100%}
+body{background:var(--chrome);color:var(--chrome-ink);font-family:var(--display);-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:1px solid var(--gold-hi);outline-offset:4px}
+img{display:block;max-width:100%}
+.app{height:100%;display:flex;flex-direction:column}
+
+/* Chrome */
+.bar{flex:none;display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;background:var(--chrome);position:relative;z-index:6}
+.brand{font-family:var(--display);font-weight:400;font-size:1.25rem;letter-spacing:.18em;color:var(--gold-hi)}
+.brand em{display:block;font-family:var(--sans);font-style:normal;font-size:.68rem;letter-spacing:.14em;color:var(--chrome-soft);margin-top:2px}
+.bar{flex-wrap:wrap;row-gap:10px}
+.stars-top{display:flex;align-items:center;gap:12px}
+.stars-top .row{display:flex;gap:5px}
+.stars-top .row svg{width:15px;height:15px}
+.stars-top .row .st-on{filter:drop-shadow(0 0 4px rgba(238,221,176,.55))}
+.stars-top .num{font-family:var(--sans);font-size:.72rem;letter-spacing:.1em;color:var(--gold-hi);white-space:nowrap}
+@media (max-width:640px){.bar{justify-content:center;text-align:center;padding:12px 12px 10px}.brand{width:100%}.stars-top{width:100%;justify-content:center;gap:10px}.stars-top .row{gap:3px}.stars-top .row svg{width:12px;height:12px}}
+.nav{flex:none;position:relative;z-index:6;background:var(--chrome)}
+.nav .line{position:absolute;left:0;top:0;height:1px;background:var(--gold-lo);width:100%}
+.nav .line i{position:absolute;left:0;top:0;height:1px;background:var(--gold-hi);width:0;transition:width .15s linear}
+.tabs{display:flex}
+.tab{flex:1;background:none;border:0;cursor:pointer;padding:14px 4px 16px;font-family:var(--sans);font-size:.72rem;letter-spacing:.12em;color:var(--chrome-soft);transition:color .3s}
+.tab.active{color:var(--gold-hi)}
+.tab .n{display:block;font-family:var(--display);font-style:italic;letter-spacing:0;font-size:.95rem;margin-top:2px;opacity:.8;min-height:1.2em}
+
+/* Corridor */
+.corridor{flex:1;position:relative;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scrollbar-width:none;overscroll-behavior-x:contain}
+.corridor::-webkit-scrollbar{display:none}
+.track{position:relative;height:100%;display:flex;width:max-content;min-width:100%}
+.ceil,.wall,.skirt,.floor{position:absolute;left:0;right:0;pointer-events:none}
+.ceil{top:0;height:7%;background:linear-gradient(180deg,#0B0607,var(--ceil));box-shadow:0 1px 0 var(--gold-deep)}
+.ceil::after{content:"";position:absolute;left:0;right:0;bottom:24%;height:2px;background:linear-gradient(180deg,#3A3030,#161010)}
+.wall{top:7%;height:71%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.05) 0 1px,transparent 1px 3px),
+    linear-gradient(180deg,rgba(0,0,0,.45) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 70%,rgba(0,0,0,.35) 100%),
+    linear-gradient(180deg,var(--wall-hi),var(--wall) 45%,var(--wall-lo))}
+.skirt{top:78%;height:2.4%;background:linear-gradient(180deg,#2A1A1B,var(--skirt));box-shadow:inset 0 1px 0 var(--gold-lo),0 2px 4px rgba(0,0,0,.6)}
+.floor{top:80.4%;bottom:0;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(90deg,transparent 0 179px,rgba(0,0,0,.35) 179px 180px),
+    linear-gradient(180deg,#0C0708 0%,var(--floor-hi) 30%,var(--floor) 100%)}
+
+.bay{position:relative;z-index:1;flex:none;height:100%;width:min(100vw,860px);scroll-snap-align:center;overflow:hidden}
+@media (max-width:640px){.bay{width:100vw}}
+
+/* Light */
+.fixture{position:absolute;top:calc(7% - 4px);left:50%;width:18px;height:22px;transform:translateX(-50%);
+  background:linear-gradient(90deg,#1C1515,#4A4040 45%,#1C1515);border-radius:2px 2px 7px 7px;box-shadow:0 2px 3px rgba(0,0,0,.6)}
+.fixture::after{content:"";position:absolute;left:3px;right:3px;bottom:-2px;height:3px;border-radius:50%;background:#FFF1D2;box-shadow:0 0 10px 3px rgba(255,236,200,.7)}
+.beam{position:absolute;top:calc(7% + 16px);left:50%;width:min(76%,520px);height:62%;transform:translateX(-50%);pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,236,200,.13),rgba(255,236,200,0) 80%);
+  clip-path:polygon(47% 0,53% 0,100% 100%,0 100%);filter:blur(6px)}
+.pool{position:absolute;top:7%;left:50%;width:min(92%,640px);height:71%;transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(ellipse 48% 52% at 50% 44%,var(--light),rgba(255,226,178,.08) 55%,transparent 75%);mix-blend-mode:screen}
+.sheen{position:absolute;top:81%;left:50%;width:min(70%,460px);height:16%;transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(ellipse 50% 40% at 50% 30%,rgba(255,226,178,.16),transparent 75%);mix-blend-mode:screen}
+.sheen::after{content:"";position:absolute;left:38%;right:38%;top:8%;height:60%;background:linear-gradient(180deg,rgba(198,167,106,.18),transparent);filter:blur(5px)}
+
+/* Artwork */
+.art{position:absolute;left:50%;top:15%;height:50%;aspect-ratio:4/5;transform:translateX(-50%);z-index:2;container-type:size}
+.art.hero{height:54%;top:13%;aspect-ratio:3/4}
+.frame{position:absolute;inset:0;
+  box-shadow:0 34px 36px -22px rgba(0,0,0,.85),0 60px 60px -30px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.6)}
+.moulding{position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.35),transparent 6%,transparent 94%,rgba(0,0,0,.35)),
+    linear-gradient(180deg,rgba(255,250,230,.45),transparent 5%,transparent 93%,rgba(0,0,0,.45)),
+    linear-gradient(135deg,var(--gold-lo) 0%,var(--gold-hi) 18%,var(--gold) 34%,#8E7238 50%,var(--gold-hi) 66%,var(--gold) 80%,var(--gold-deep) 100%)}
+.moulding::before{content:"";position:absolute;inset:2.4cqmin;border:1px solid rgba(78,61,29,.7);box-shadow:inset 0 0 0 2px rgba(255,244,210,.35),0 0 0 1px rgba(255,244,210,.25)}
+.moulding::after{content:"";position:absolute;inset:4.9cqmin;box-shadow:inset 0 0 0 2px var(--gold-deep),inset 0 0 0 3px rgba(255,240,200,.4)}
+.matboard{position:absolute;inset:5.5cqmin;background:#F1EBDF;padding:7cqmin;box-shadow:inset 0 4px 10px rgba(0,0,0,.35),inset 0 0 0 1px rgba(0,0,0,.25)}
+.matboard::before{content:"";position:absolute;inset:calc(7cqmin - 3px);box-shadow:0 0 0 1px rgba(0,0,0,.08),inset 0 2px 3px rgba(0,0,0,.2);pointer-events:none}
+.canvas{position:relative;width:100%;height:100%;overflow:hidden;background:#FBF9F4}
+.canvas img{width:100%;height:100%;object-fit:cover}
+.canvas::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.08),transparent 40%);pointer-events:none}
+button.art{background:none;border:0;padding:0;cursor:zoom-in}
+
+/* Velvet */
+.velvet{position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.45),transparent 16%,transparent 72%,rgba(0,0,0,.5)),
+    repeating-linear-gradient(90deg,var(--velvet-1) 0,var(--velvet-2) 6px,var(--velvet-3) 10px,var(--velvet-2) 14px,var(--velvet-1) 21px)}
+.brass{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:.5em 1.1em;min-width:52%;text-align:center;
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold) 45%,var(--gold-lo));color:#2B2012;
+  box-shadow:0 3px 6px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.6),inset 0 -1px 0 rgba(0,0,0,.3)}
+.brass span{display:block;font-family:var(--sans);font-size:.6rem;letter-spacing:.2em}
+.brass b{display:block;font-family:var(--display);font-weight:500;font-size:1.5rem;line-height:1.1}
+.curtain{position:absolute;inset:0;display:flex;z-index:3}
+.curtain .half{flex:1;position:relative;transition:transform 1.8s cubic-bezier(.65,0,.2,1)}
+.curtain .half:nth-child(2) .velvet{box-shadow:inset -18px 0 24px rgba(0,0,0,.45)}
+.curtain .half:last-child .velvet{box-shadow:inset 18px 0 24px rgba(0,0,0,.45)}
+.curtain .valance{position:absolute;left:-2%;right:-2%;top:0;height:11%;z-index:4;
+  background:linear-gradient(180deg,rgba(0,0,0,.3),transparent 40%,rgba(0,0,0,.45)),repeating-linear-gradient(90deg,var(--velvet-1) 0,var(--velvet-3) 9px,var(--velvet-1) 18px);
+  border-bottom:2px solid var(--gold);box-shadow:0 4px 8px rgba(0,0,0,.5)}
+.open .curtain .half:nth-child(2){transform:translateX(-94%)}
+.open .curtain .half:last-child{transform:translateX(94%)}
+.reveal{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:12%;
+  background:radial-gradient(ellipse at 50% 38%,#FBF7EF,#EDE4D4);color:var(--paper-ink)}
+.reveal .k{font-family:var(--sans);font-size:.66rem;letter-spacing:.2em;color:var(--paper-soft)}
+.reveal .word{font-family:var(--display);font-weight:400;font-size:clamp(1.15rem,3.3vh,1.9rem);line-height:1.1;margin-top:.45em;text-wrap:balance}
+.reveal .word.flip{transform:rotate(180deg)}
+.reveal .rule{width:34px;height:1px;background:var(--gold-lo);margin:.9em auto 0}
+
+/* Wall label */
+.label{position:absolute;z-index:2;left:calc(100% + 34px);top:50%;transform:translateY(-50%);width:228px;
+  background:var(--paper);color:var(--paper-ink);padding:16px 16px 16px;
+  box-shadow:0 10px 16px -10px rgba(0,0,0,.8),0 0 0 1px rgba(0,0,0,.25)}
+.label .k{font-family:var(--sans);font-size:.66rem;letter-spacing:.16em;color:var(--paper-soft)}
+.label .t{font-family:var(--display);font-weight:500;font-size:1.35rem;line-height:1.15;margin:.2em 0 .45em}
+.label p{margin:0 0 .5em;font-family:var(--sans);font-size:.78rem;line-height:1.5;color:var(--paper-soft)}
+.label p.cap{font-family:var(--display);font-style:italic;font-size:1.02rem;line-height:1.35;color:var(--paper-ink)}
+.label input{width:100%;margin:.2em 0 .2em;padding:7px 0;border:0;border-bottom:1px solid #CDBFA8;background:transparent;color:var(--paper-ink);font-family:var(--display);font-style:italic;font-size:1rem}
+.label input::placeholder{color:#A6958A}
+@media (max-width:640px){
+  .art{top:12%;height:41%}
+  .art.hero{top:11%;height:44%}
+  .label{left:50%;top:calc(100% + 20px);transform:translateX(-50%);width:min(300px,84vw);padding:12px 14px}
+  .label .t{font-size:1.2rem}
+}
+.btn{display:inline-flex;align-items:center;justify-content:center;margin-top:.4em;padding:10px 18px;cursor:pointer;
+  font-family:var(--sans);font-size:.72rem;letter-spacing:.14em;
+  background:#3A0D16;color:var(--gold-hi);border:1px solid var(--gold-lo);transition:background .25s,border-color .25s}
+.btn:hover{background:#4E1220;border-color:var(--gold)}
+.btn[disabled]{opacity:.5;cursor:progress}
+.btn.line{background:transparent;color:var(--gold-hi);border-color:rgba(198,167,106,.5)}
+
+/* Stanchions */
+.posts{position:absolute;left:50%;bottom:6%;width:min(62%,380px);height:18%;transform:translateX(-50%);z-index:3;pointer-events:none}
+.posts .p{position:absolute;bottom:0;width:10px;height:78%;border-radius:3px;
+  background:linear-gradient(90deg,#5E4A22,#F0DDA8 40%,#B8964E 60%,#4E3D1D)}
+.posts .p::before{content:"";position:absolute;left:-5px;top:-12px;width:20px;height:16px;border-radius:50% 50% 40% 40%;
+  background:radial-gradient(circle at 35% 30%,#FFF1C8,#C6A76A 45%,#5E4A22)}
+.posts .p::after{content:"";position:absolute;left:-14px;bottom:-4px;width:38px;height:8px;border-radius:50%;
+  background:linear-gradient(180deg,#D8BE82,#5E4A22);box-shadow:0 4px 8px rgba(0,0,0,.6)}
+.posts .p:first-child{left:0}.posts .p:nth-child(2){right:0}
+.posts svg{position:absolute;left:5px;right:5px;top:0;width:calc(100% - 10px);height:70%;overflow:visible}
+
+/* Entrance */
+.bay.entrance{width:max(100vw,min(100vw,1100px))}
+.inscription{position:absolute;left:50%;top:14%;transform:translateX(-50%);width:min(88%,760px);text-align:center;z-index:2}
+.inscription .k{font-family:var(--sans);font-size:.72rem;letter-spacing:.3em;color:var(--gold)}
+.inscription h1{margin:.35em 0 .25em;font-family:var(--display);font-weight:300;font-size:clamp(2.4rem,8vw,5.2rem);line-height:.98;letter-spacing:.14em;
+  background:linear-gradient(180deg,#FFF3D2 0%,var(--gold-hi) 35%,var(--gold) 62%,#8E7238 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 1px rgba(0,0,0,.6))}
+.inscription .sub{font-family:var(--display);font-style:italic;font-size:clamp(1.1rem,2.6vw,1.45rem);color:#E6D7C0;margin:0 auto;max-width:34ch;line-height:1.4}
+.starline{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin:1.6em auto .5em;max-width:460px}
+@media (max-width:640px){.inscription .starline{gap:5px}.inscription .starline svg{width:13px;height:13px}.posts{display:none}}
+.starline svg{width:15px;height:15px}
+.st-on path{fill:var(--gold-hi);stroke:var(--gold)}
+.st-off path{fill:none;stroke:rgba(198,167,106,.55)}
+.inscription .count{font-family:var(--sans);font-size:.72rem;letter-spacing:.16em;color:var(--chrome-soft)}
+.inscription .actions{margin-top:1.6em;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.hint{position:absolute;right:6%;top:70%;z-index:2;display:flex;align-items:center;gap:12px;font-family:var(--sans);font-size:.68rem;letter-spacing:.18em;color:var(--gold)}
+.hint i{display:block;width:56px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));position:relative;overflow:hidden}
+.hint i::after{content:"";position:absolute;top:0;left:-30%;width:30%;height:1px;background:var(--gold-hi);animation:hint 2.4s ease-in-out infinite}
+@keyframes hint{to{left:100%}}
+.column{position:absolute;top:7%;height:71%;width:clamp(38px,4.6vw,64px);z-index:1;
+  background:
+    repeating-linear-gradient(90deg,rgba(0,0,0,.12) 0 2px,transparent 2px 9px),
+    linear-gradient(90deg,#6F6558,#E9E0D1 28%,#CFC3AF 52%,#EFE7DA 70%,#7A6F60);
+  box-shadow:0 0 30px rgba(0,0,0,.6)}
+.column::before,.column::after{content:"";position:absolute;left:-10px;right:-10px;height:22px;background:linear-gradient(180deg,#EFE7DA,#9A8E7B);box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.column::before{top:0}.column::after{bottom:0}
+.column.l{left:5%}.column.r{right:5%}
+@media (max-width:640px){.column{display:none}.hint{right:50%;transform:translateX(50%);top:73%}.inscription{top:15%}}
+
+/* Doorway between wings */
+.bay.door{width:min(80vw,420px)}
+.arch{position:absolute;left:50%;top:27%;bottom:22%;width:52%;transform:translateX(-50%);border-radius:999px 999px 0 0;
+  background:radial-gradient(ellipse 60% 30% at 50% 100%,rgba(255,220,170,.22),transparent 70%),linear-gradient(180deg,#0B0607,#1B1012 70%,#231517);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 18px 30px rgba(0,0,0,.8),0 0 0 7px #4A121C,0 0 0 8px var(--gold-lo)}
+.door .name{position:absolute;left:0;right:0;top:12%;text-align:center;z-index:2}
+.door .name .k{font-family:var(--sans);font-size:.64rem;letter-spacing:.24em;color:var(--gold)}
+.door .name h2{margin:.2em 0 0;font-family:var(--display);font-weight:300;font-size:clamp(1.6rem,4.4vh,2.3rem);letter-spacing:.06em;color:#F0E4CF}
+
+/* Notice & end */
+.notice{position:absolute;left:50%;top:30%;transform:translateX(-50%);width:min(320px,80vw);text-align:center;z-index:2;
+  background:var(--paper);color:var(--paper-ink);padding:20px 22px;box-shadow:0 10px 16px -10px rgba(0,0,0,.8)}
+.notice .t{font-family:var(--display);font-size:1.4rem;line-height:1.15;margin-bottom:.35em}
+.notice p{margin:0;font-family:var(--sans);font-size:.8rem;line-height:1.55;color:var(--paper-soft)}
+.bay.end{width:min(100vw,1000px)}
+.end .inscription{top:26%}
+.end .inscription h1{font-size:clamp(1.8rem,5vw,3rem);letter-spacing:.1em}
+
+/* Walk */
+.walk{position:absolute;top:40%;z-index:5;width:46px;height:46px;border-radius:50%;cursor:pointer;
+  border:1px solid rgba(198,167,106,.55);background:rgba(18,10,11,.55);color:var(--gold-hi);display:grid;place-items:center;backdrop-filter:blur(6px);transition:opacity .3s}
+.walk svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.3}
+.walk.prev{left:14px}.walk.next{right:14px}
+.walk.hide{opacity:0;pointer-events:none}
+@media (hover:none),(max-width:640px){.walk{width:38px;height:38px;top:auto;bottom:4%;background:rgba(18,10,11,.7)}.walk.prev{left:10px}.walk.next{right:10px}}
+.stage{flex:1;position:relative;display:flex;min-height:0}
+
+/* Lightbox */
+dialog{border:0;padding:0;background:transparent;max-width:min(820px,94vw);width:100%;color:var(--chrome-ink);overflow:visible}
+dialog::backdrop{background:radial-gradient(ellipse 60% 55% at 50% 40%,rgba(92,24,36,.92),rgba(8,4,5,.98))}
+.lb{display:grid;gap:18px;justify-items:center}
+.lbf{padding:clamp(12px,2.4vw,20px);background:
+    linear-gradient(90deg,rgba(0,0,0,.35),transparent 6%,transparent 94%,rgba(0,0,0,.35)),
+    linear-gradient(180deg,rgba(255,250,230,.45),transparent 5%,transparent 93%,rgba(0,0,0,.45)),
+    linear-gradient(135deg,var(--gold-lo) 0%,var(--gold-hi) 18%,var(--gold) 34%,#8E7238 50%,var(--gold-hi) 66%,var(--gold) 80%,var(--gold-deep) 100%);
+  box-shadow:0 30px 50px -20px #000,0 0 0 1px rgba(0,0,0,.6)}
+.lbm{background:#F1EBDF;padding:clamp(14px,3vw,28px);box-shadow:inset 0 4px 10px rgba(0,0,0,.35)}
+.lbm img{max-height:62vh;max-width:min(76vw,680px);width:auto;height:auto;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
+.lb .label{position:static;transform:none;width:min(420px,92vw);text-align:center}
+.lb .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));transform:translate(-50%,14px);opacity:0;z-index:50;
+  background:var(--paper);color:var(--paper-ink);padding:11px 18px;transition:.4s;font-family:var(--display);font-style:italic;font-size:1.05rem;max-width:90vw;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* Sound */
+.snd{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;border:1px solid rgba(198,167,106,.45);background:transparent;color:var(--gold-hi);cursor:pointer;display:grid;place-items:center}
+.snd svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.4}
+.snd[aria-pressed="true"]{background:rgba(198,167,106,.16);border-color:var(--gold)}
+.bar{padding-right:110px}
+.snd.key{right:58px}
+.snd.key[aria-pressed="true"]{border-color:var(--gold);color:var(--gold-hi);background:rgba(198,167,106,.16)}
+.vb input.vbname{position:relative;padding:10px;border:1px solid #D8CCB7;background:#FFFDF8;color:#3A2A22;font-family:var(--display);font-size:1.05rem}
+.vb.login{max-width:440px}
+.gbform{display:grid;gap:8px}
+.gbform > input{padding:9px 10px;border:1px solid #D8CCB7;background:#FBF8F2;color:var(--paper-ink);font-family:var(--display);font-size:1rem}
+.gbrow{display:flex;gap:8px}
+@media (max-width:640px){.bar{padding-right:12px;padding-left:12px}.snd{top:14px;transform:none;right:12px;width:30px;height:30px}.snd.key{right:auto;left:12px}}
+
+/* Artist */
+.art.portrait .matboard{padding:6cqmin}
+.art.portrait .canvas{border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2),0 0 0 3px #F1EBDF,0 0 0 4px rgba(122,98,50,.5)}
+.silhouette{position:absolute;inset:0;background:radial-gradient(circle at 50% 36%,#D9CDBB 0 17%,transparent 17.5%),radial-gradient(ellipse 34% 30% at 50% 88%,#D9CDBB 0 99%,transparent 100%),linear-gradient(180deg,#EFE8DC,#E3D9C8)}
+.sig{font-family:"Pinyon Script","Snell Roundhand","Apple Chancery",cursive;font-weight:400;font-size:2.3rem;line-height:1;margin:.1em 0 .25em;color:#3A0D16}
+.label textarea{width:100%;min-height:70px;margin:.3em 0;padding:8px;border:1px solid #D8CCB7;background:#FBF8F2;color:var(--paper-ink);font-family:var(--display);font-style:italic;font-size:1rem;resize:vertical}
+.label .row2{display:flex;gap:8px;flex-wrap:wrap}
+.label .btn.soft{background:transparent;color:#3A0D16;border-color:#C9B78F}
+.label .hint2{font-size:.72rem;color:#9C8A7E;margin-top:.3em}
+
+/* Certificate */
+.art.cert{aspect-ratio:1.36;height:44%;top:16%}
+@media (max-width:640px){.art.cert{height:29%;top:15%}.art.portrait{height:36%}}
+.certdoc{position:absolute;inset:0;container-type:size;background:radial-gradient(ellipse at 50% 40%,#FFFDF8,#F1E8D7);color:#3A0D16;text-align:center;display:grid;place-content:center;padding:6%}
+.certdoc::before{content:"";position:absolute;inset:4%;border:1px solid #B79C6E;box-shadow:inset 0 0 0 3px #FFFDF8,inset 0 0 0 4px rgba(183,156,110,.6)}
+.certdoc .ck{font-family:var(--sans);font-size:3.2cqh;letter-spacing:.3em;color:#8A7358}
+.certdoc .ct{font-family:var(--display);font-weight:400;font-size:9cqh;line-height:1.05;margin:.25em 0 .1em}
+.certdoc .cs{font-family:"Pinyon Script",cursive;font-size:13cqh;line-height:1.1;color:#5C1824}
+.certdoc .cp{font-family:var(--display);font-style:italic;font-size:4.4cqh;color:#6E5A50;margin-top:.3em}
+.certdoc .seal{position:absolute;right:9%;bottom:11%;width:15cqh;height:15cqh;border-radius:50%;background:radial-gradient(circle at 38% 32%,#B8354A,#6E1424 60%,#3E0A14);box-shadow:0 2px 4px rgba(0,0,0,.4),inset 0 0 0 3px rgba(0,0,0,.18);display:grid;place-items:center;color:#F0D9A8;font-family:var(--display);font-size:4.4cqh}
+.sash{position:absolute;inset:0;display:grid;place-items:center;background:rgba(30,6,10,.35);backdrop-filter:blur(3px)}
+.sash div{width:130%;transform:rotate(-12deg);padding:4cqh 0;text-align:center;background:linear-gradient(180deg,#8A2536,#5E1422);color:#F4E2B8;font-family:var(--sans);font-size:max(8px,5cqh);letter-spacing:.24em;box-shadow:0 4px 10px rgba(0,0,0,.5);border-top:1px solid var(--gold);border-bottom:1px solid var(--gold)}
+.certwrap{position:absolute;inset:0;container-type:size}
+
+/* Guestbook */
+dialog{max-height:94vh;overflow-y:auto;scrollbar-width:thin}
+.gb{width:min(420px,92vw);background:var(--paper);color:var(--paper-ink);padding:18px 18px 16px;box-shadow:0 10px 16px -10px rgba(0,0,0,.8)}
+.gb h3{margin:0 0 .5em;font-family:var(--display);font-weight:500;font-size:1.3rem}
+.gb ol{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:12px}
+.gb li{border-top:1px solid #E4D9C6;padding-top:10px}
+.gb li p{margin:0;font-family:var(--display);font-style:italic;font-size:1.08rem;line-height:1.35}
+.gb li small{display:flex;justify-content:space-between;gap:8px;margin-top:4px;font-family:var(--sans);font-size:.7rem;letter-spacing:.06em;color:var(--paper-soft)}
+.gb li small button{background:none;border:0;padding:0;cursor:pointer;color:#9C4A55;font:inherit}
+.gb .empty{font-family:var(--sans);font-size:.8rem;color:var(--paper-soft);margin:0 0 12px}
+.gb form.gbform{display:grid}
+.gb input{flex:1;min-width:0;padding:9px 10px;border:1px solid #D8CCB7;background:#FBF8F2;color:var(--paper-ink);font-family:var(--display);font-style:italic;font-size:1rem}
+.gb .btn{margin:0}
+.gb .note{font-family:var(--sans);font-size:.74rem;color:var(--paper-soft);margin:0}
+
+/* Work placard under the frame */
+.art.work{top:10%;height:46%}
+.label.below{left:50%;top:calc(100% + 22px);transform:translateX(-50%);width:min(380px,86vw);text-align:center}
+.label .words{font-family:var(--display);font-style:italic;font-size:1.06rem;line-height:1.4;color:var(--paper-ink);margin:0 0 .5em;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.label .words.full{display:block;-webkit-line-clamp:unset;white-space:pre-line}
+.label .words.empty{color:#A6958A}
+.label .wlab{font-family:var(--sans);font-size:.62rem;letter-spacing:.18em;color:var(--paper-soft);margin:.6em 0 .25em}
+.label .div{width:28px;height:1px;background:#CDBFA8;margin:.55em auto .55em}
+@media (max-width:640px){.art.work{top:10%;height:38%}.label.below{top:calc(100% + 16px)}.label .words{-webkit-line-clamp:2}}
+
+/* Info stand beside each drawing */
+.bay.kbay .pool,.bay.kbay .beam,.bay.kbay .fixture,.bay.kbay .sheen{left:35%}
+.bay.kbay .art.work{left:35%;top:12%;height:50%}
+.kiosk{position:absolute;z-index:3;left:75%;transform:translateX(-50%);top:40%;bottom:5.5%;width:min(290px,36%);
+  display:flex;flex-direction:column;align-items:center;cursor:pointer;background:none;border:0;padding:0;text-align:left;color:var(--paper-ink)}
+.kiosk::before{content:"";position:absolute;left:-30%;right:-30%;top:-30%;height:80%;pointer-events:none;
+  background:radial-gradient(ellipse 50% 50% at 50% 60%,rgba(255,226,178,.16),transparent 70%);mix-blend-mode:screen}
+.kiosk .panel{position:relative;width:100%;transform:perspective(900px) rotateX(14deg);transform-origin:50% 100%;padding:9px;border-radius:3px;
+  background:linear-gradient(180deg,#43241B,#1C0D0A);border-top:2px solid var(--gold);
+  box-shadow:0 22px 26px -12px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,220,180,.18),inset 0 0 0 1px rgba(0,0,0,.5)}
+.kiosk .inner{background:linear-gradient(180deg,#FBF7EF,var(--paper));padding:14px 15px 12px;box-shadow:inset 0 0 0 1px rgba(122,98,50,.35),inset 0 2px 6px rgba(0,0,0,.12)}
+.kiosk .k{font-family:var(--sans);font-size:.62rem;letter-spacing:.18em;color:var(--paper-soft)}
+.kiosk .t{font-family:var(--display);font-weight:500;font-size:1.3rem;line-height:1.15;margin:.15em 0 .1em}
+.kiosk .rule{width:26px;height:1px;background:var(--gold-lo);margin:.5em 0 .55em}
+.kiosk .wlab{font-family:var(--sans);font-size:.58rem;letter-spacing:.18em;color:var(--paper-soft);margin-bottom:.25em}
+.kiosk .words{font-family:var(--display);font-style:italic;font-size:1.02rem;line-height:1.38;margin:0 0 .55em;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.kiosk .words.empty{color:#A6958A}
+.kiosk dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:0 0 .5em;font-family:var(--sans);font-size:.7rem;line-height:1.45}
+.kiosk dt{color:var(--paper-soft)}
+.kiosk dd{margin:0;color:var(--paper-ink)}
+.kiosk .more{font-family:var(--sans);font-size:.62rem;letter-spacing:.14em;color:#7A1022}
+.kiosk .post{flex:1;min-height:16px;width:12px;background:linear-gradient(90deg,#4E3D1D,#F0DDA8 40%,#B8964E 62%,#3E2F14);box-shadow:0 0 6px rgba(0,0,0,.5)}
+.kiosk .foot{width:96px;height:12px;border-radius:50%;background:radial-gradient(ellipse at 50% 30%,#E2C98E,#5E4A22 72%);box-shadow:0 8px 12px rgba(0,0,0,.65)}
+.kiosk:hover .panel{border-top-color:var(--gold-hi)}
+.bay.kbay .art.work.land{height:auto;width:46%;max-height:56%}
+.kiosk .mline{display:none}
+@media (max-width:640px){
+  .bay.kbay .pool,.bay.kbay .beam,.bay.kbay .fixture,.bay.kbay .sheen{left:50%}
+  .bay.kbay .art.work{left:50%;top:9%;height:44%}
+  .bay.kbay .art.work.land{height:auto;width:90vw;top:14%}
+  .kiosk{left:50%;top:60%;width:min(300px,80vw)}
+  .kiosk dl,.kiosk .rule,.kiosk .wlab{display:none}
+  .kiosk .mline{display:block;font-family:var(--sans);font-size:.66rem;color:var(--paper-soft);margin:0 0 .4em}
+  .kiosk .panel{transform:perspective(900px) rotateX(9deg)}
+  .kiosk .inner{padding:11px 13px 10px}
+  .kiosk .t{font-size:1.15rem}
+  .kiosk .words{-webkit-line-clamp:2;font-size:.96rem;margin:.3em 0 .35em}
+  .kiosk dl{font-size:.66rem}
+}
+
+/* Visitors' book */
+.stand{position:absolute;left:50%;bottom:6%;width:70px;height:34%;transform:translateX(-50%);z-index:2;
+  background:linear-gradient(90deg,#1E0D0B,#4A2A20 40%,#2E1812 70%,#150907);box-shadow:0 10px 18px rgba(0,0,0,.6)}
+.stand::after{content:"";position:absolute;left:-40px;right:-40px;bottom:-8px;height:14px;border-radius:3px;background:linear-gradient(180deg,#4A2A20,#1A0B08)}
+.desk{position:absolute;left:50%;top:44%;width:min(520px,88vw);height:5%;transform:translateX(-50%) perspective(600px) rotateX(38deg);z-index:2;
+  background:linear-gradient(180deg,#5A3426,#2A140E);box-shadow:0 16px 20px rgba(0,0,0,.6)}
+.book{position:absolute;left:50%;top:21%;width:min(480px,84vw);aspect-ratio:1.55;transform:translateX(-50%);z-index:3;display:flex;cursor:pointer;
+  background:none;border:0;padding:0;filter:drop-shadow(0 18px 18px rgba(0,0,0,.6))}
+.book::before{content:"";position:absolute;inset:-3% -2.5% -5%;background:linear-gradient(180deg,#5E1422,#3A0B14);border-radius:4px;z-index:-1}
+.page{flex:1;position:relative;padding:7% 6%;text-align:left;color:#3A2A22;overflow:hidden;
+  background:linear-gradient(90deg,#F6EEDD,#FBF6EC 70%,#E6DAC2)}
+.page.l{border-radius:3px 0 0 3px;background:linear-gradient(90deg,#E9DEC8,#FBF6EC 30%,#F4ECDA 88%,#D9CBB0)}
+.page.r{border-radius:0 3px 3px 0;background:linear-gradient(90deg,#D9CBB0,#F4ECDA 12%,#FBF6EC 70%,#E9DEC8)}
+.page.l{text-align:center;display:flex;flex-direction:column;justify-content:center}
+.page .bt{font-family:var(--display);font-weight:400;font-size:clamp(1.05rem,2.6vw,1.6rem);line-height:1.1;color:#3A0D16}
+.page .bs{font-family:"Pinyon Script",cursive;font-size:clamp(1.3rem,3.6vw,2.2rem);color:#5C1824;margin-top:.2em}
+.page .bc{font-family:var(--sans);font-size:.62rem;letter-spacing:.16em;color:#8A7358;margin-top:.8em}
+.page .en{font-family:var(--display);font-style:italic;font-size:clamp(.78rem,1.8vw,1rem);line-height:1.3;margin:0 0 .15em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.page .ew{font-family:var(--sans);font-size:.56rem;letter-spacing:.08em;color:#8A7358;margin:0 0 .7em}
+.page .lines{position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0 21px,rgba(122,98,50,.12) 21px 22px);pointer-events:none}
+.bookcta{position:absolute;left:50%;top:calc(21% + min(480px,84vw)/1.55 + 5%);transform:translateX(-50%);z-index:3;white-space:nowrap}
+.vb{margin:0 auto;width:min(560px,94vw);background:linear-gradient(90deg,#F4ECDA,#FBF6EC 50%,#F4ECDA);color:#3A2A22;padding:26px 24px 20px;box-shadow:0 30px 50px -20px #000;position:relative}
+.vb::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0 27px,rgba(122,98,50,.12) 27px 28px);pointer-events:none}
+.vb h3{position:relative;margin:0;text-align:center;font-family:var(--display);font-weight:400;font-size:1.8rem;color:#3A0D16}
+.vb .sub{position:relative;text-align:center;font-family:var(--sans);font-size:.7rem;letter-spacing:.14em;color:#8A7358;margin:.3em 0 1.2em}
+.vb ol{position:relative;list-style:none;margin:0 0 16px;padding:0;display:grid;gap:14px}
+.vb li p{margin:0;font-family:var(--display);font-style:italic;font-size:1.12rem;line-height:1.4;white-space:pre-line}
+.vb li small{display:flex;justify-content:space-between;gap:8px;margin-top:4px;font-family:var(--sans);font-size:.7rem;letter-spacing:.06em;color:#8A7358}
+.vb li small button{background:none;border:0;padding:0;cursor:pointer;color:#9C4A55;font:inherit}
+.vb form{position:relative;display:grid;gap:8px;margin-bottom:18px}
+.vb textarea{min-height:70px;padding:10px;border:1px solid #D8CCB7;background:#FFFDF8;color:#3A2A22;font-family:var(--display);font-style:italic;font-size:1.05rem;resize:vertical}
+.vb .row{position:relative;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.vb .note{position:relative;font-family:var(--sans);font-size:.76rem;color:#8A7358;text-align:center;margin:0 0 14px}
+.vb .none{position:relative;text-align:center;font-family:var(--display);font-style:italic;color:#8A7358;margin:0 0 14px}
+.label textarea.big{min-height:90px}
+
+/* Star flight */
+.flystar{position:fixed;z-index:80;width:64px;height:64px;pointer-events:none;filter:drop-shadow(0 0 14px rgba(255,230,170,.9))}
+.flystar path{fill:var(--gold-hi);stroke:var(--gold)}
+.spark{position:fixed;z-index:79;width:6px;height:6px;border-radius:50%;background:#FFF1C8;pointer-events:none;box-shadow:0 0 8px 2px rgba(255,230,170,.8)}
+.stars-top .row svg.pop{animation:pop .9s ease}
+@keyframes pop{0%{transform:scale(1)}35%{transform:scale(1.9)}100%{transform:scale(1)}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (prefers-reduced-motion: reduce){.curtain .half,.toast{transition:none}.hint i::after{animation:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <div class="brand">THE MAHAN MUSEUM<em>Inktober 2026</em></div>
+    <div class="stars-top" id="starsTop" aria-live="polite"></div>
+    <button class="snd key" id="key" aria-pressed="false" aria-label="Curator's entrance"><svg viewBox="0 0 24 24"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M21 12v2"/></svg></button>
+    <button class="snd" id="snd" aria-pressed="false" aria-label="Gallery sound"><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path id="sndwave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" opacity=".35"/></svg></button>
+  </header>
+  <div class="stage">
+    <div class="corridor" id="corridor"><div class="track" id="track"></div></div>
+    <button class="walk prev hide" id="prev" aria-label="Walk back"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg></button>
+    <button class="walk next" id="next" aria-label="Walk on"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
+  </div>
+  <nav class="nav" aria-label="Museum wings">
+    <div class="line"><i id="progress"></i></div>
+    <div class="tabs">
+      <button class="tab" data-s="entrance">Entrance<span class="n"></span></button>
+      <button class="tab" data-s="challenge">Challenge<span class="n" id="n-ch"></span></button>
+      <button class="tab" data-s="collection">Collection<span class="n" id="n-col"></span></button>
+      <button class="tab" data-s="curtains">Curtains<span class="n" id="n-cur"></span></button>
+    </div>
+  </nav>
+</div>
+
+<dialog id="lb" aria-label="Artwork"></dialog>
+<input type="file" id="file" accept="image/*" class="sr" tabindex="-1">
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  const SUPABASE_URL = "https://jjdlxzkmaqijxivfinla.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_bkT-u4Iu3ap_uYmjSC6JOQ_XgnGdK9L";
+  let CH = {}, TOTAL = 20;
+  const OPENS = "2026-09-25";
+  const $ = id => document.getElementById(id);
+  const pad = n => String(n).padStart(2,"0");
+  const today = () => new Intl.DateTimeFormat("en-CA",{ timeZone: "Asia/Riyadh", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+  const STAR = '<path d="M12 2.6l2.85 6 6.55.8-4.85 4.55 1.28 6.52L12 17.25l-5.83 3.22 1.28-6.52L2.6 9.4l6.55-.8z" stroke-width="1" stroke-linejoin="round"/>';
+  const ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX"];
+
+  let db = null, assets = null, curator = false, ready = false, busy = false, capDraft = "";
+  let state = { revealed: -1, lastCompletedDate: null, revealedAt: null };
+  let works = {};
+  let sb = null, session = null, downloads = true, artist = { photoId: null, url: null, bio: "" }, justRevealed = false, bioDraft = null, gbUnsub = null, gbBlocked = false;
+  const corridor = $("corridor"), track = $("track");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  function toast(m){ const t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove("show"), 3400); }
+  function doneCount(){ let n = 0; while (works[n]) n++; return n; }
+  function daysUntil(s){ const [y,m,d] = s.split("-").map(Number); const t = new Date(y,m-1,d), n = new Date(); n.setHours(0,0,0,0); return Math.round((t-n)/864e5); }
+  function fmtDate(iso){ try { return new Date(iso).toLocaleDateString("en-GB",{day:"numeric",month:"long"}); } catch(e){ return ""; } }
+  function stars(done, cls){ const w = el("div", cls); let h = ""; for (let i=0;i<TOTAL;i++) h += '<svg viewBox="0 0 24 24" class="'+(i<done?"st-on":"st-off")+'" aria-hidden="true">'+STAR+'</svg>'; w.innerHTML = h; return w; }
+
+  function lit(bay){
+    bay.append(el("div","pool"), el("div","beam"), el("div","fixture"), el("div","sheen"));
+    return bay;
+  }
+  function artRatio(r){ let W = r; for (let k = 0; k < 8; k++){ const tt = 0.125 * Math.min(W, 1); W = r * (1 - 2*tt) + 2*tt; } return W; }
+  function shapeArt(a, r){
+    if (!(r > 0.2 && r < 5)) return;
+    a.style.aspectRatio = artRatio(r).toFixed(4);
+    a.classList.toggle("land", r > 1.05);
+  }
+  function framed(content, opts){
+    opts = opts || {};
+    const a = el(opts.button ? "button" : "div", "art" + (opts.hero ? " hero" : ""));
+    const f = el("div","frame"), m = el("div","moulding"), mb = el("div","matboard"), c = el("div","canvas");
+    c.appendChild(content); mb.appendChild(c); m.appendChild(mb); f.appendChild(m); a.appendChild(f);
+    return a;
+  }
+  function label(k, t){ const l = el("div","label"); l.appendChild(el("div","k",k)); l.appendChild(el("div","t",t)); return l; }
+  function para(l, text, cls){ l.appendChild(el("p", cls || null, text)); return l; }
+  function velvet(){ return el("div","velvet"); }
+
+  /* Wings */
+  function entranceBay(done){
+    const b = el("div","bay entrance"); b.dataset.s = "entrance";
+    b.append(el("div","pool"), el("div","sheen"));
+    b.append(el("div","column l"), el("div","column r"));
+    const ins = el("div","inscription");
+    ins.appendChild(el("div","k","Inktober 2026"));
+    ins.appendChild(el("h1",null,"THE MAHAN MUSEUM"));
+    ins.appendChild(el("p","sub", TOTAL + " rooms, each opened only when the one before it is finished."));
+    ins.appendChild(stars(done,"starline"));
+    ins.appendChild(el("div","count", done === 1 ? "1 star" : done + " stars"));
+    const a = el("div","actions");
+    const go = el("button","btn","Begin the tour"); go.onclick = () => goTo("challenge");
+    a.appendChild(go); ins.appendChild(a);
+    b.appendChild(ins);
+    const h = el("div","hint"); h.append(document.createTextNode("Walk right")); h.appendChild(el("i")); b.appendChild(h);
+    return b;
+  }
+  function doorBay(key, kicker, name){
+    const b = el("div","bay door"); b.dataset.s = key; b.dataset.door = "1";
+    b.append(el("div","pool"), el("div","fixture"), el("div","arch"));
+    const n = el("div","name"); n.appendChild(el("div","k",kicker)); n.appendChild(el("h2",null,name)); b.appendChild(n);
+    return b;
+  }
+  function challengeBay(done){
+    const b = lit(el("div","bay")); b.dataset.room = "challenge";
+    const box = el("div"); box.style.cssText = "position:absolute;inset:0";
+    const reveal = el("div","reveal"); box.appendChild(reveal);
+    const cur = el("div","curtain");
+    const v = el("div","valance"), h1 = el("div","half"), h2 = el("div","half");
+    h1.appendChild(velvet()); h2.appendChild(velvet()); cur.append(v, h1, h2); box.appendChild(cur);
+    const art = framed(box, { hero: true });
+    let lab, open = false;
+
+    if (!ready){
+      lab = label("One moment", db === false ? "The museum is closed" : "Lighting the hall");
+      para(lab, db === false ? "The museum couldn't be reached. Check your connection and reload." : "The curator is on the way.");
+    } else if (done >= TOTAL){
+      open = true;
+      reveal.appendChild(el("div","k","ALL " + TOTAL + " ROOMS"));
+      reveal.appendChild(el("div","word","Complete")); reveal.appendChild(el("div","rule"));
+      lab = label("The final room", "The collection is complete");
+      para(lab, "Every challenge has been drawn and hung.");
+    } else if (daysUntil(OPENS) > 0){
+      const d = daysUntil(OPENS);
+      lab = label("Room I", "Opening 1 October");
+      para(lab, d === 1 ? "The first curtain rises tomorrow." : "The first curtain rises in " + d + " days.");
+    } else if (state.revealed >= done){
+      if (curator){
+        open = true;
+        reveal.appendChild(el("div","k","ROOM " + ROMAN[done]));
+        const w = el("div","word", CH[done]); if (done === 0) w.classList.add("flip");
+        reveal.appendChild(w); reveal.appendChild(el("div","rule"));
+        lab = label("Room " + ROMAN[done], "Tonight's challenge");
+        para(lab, "Draw it, then hang it here for your star. The next curtain stays closed until this room is done.");
+        const cap = el("textarea"); cap.placeholder = "Your thoughts on this piece: what it means, how you drew it"; cap.maxLength = 600; cap.value = capDraft;
+        cap.oninput = () => { capDraft = cap.value; };
+        const btn = el("button","btn", busy ? "Hanging…" : "Hang my drawing"); btn.disabled = busy;
+        btn.onclick = () => { $("file").dataset.mode = "new"; $("file").click(); };
+        lab.append(cap, btn);
+      } else {
+        lab = label("Room " + ROMAN[done], "Being drawn");
+        para(lab, "Mahan is working on this room. It will be hung in the collection when it's finished.");
+      }
+    } else if (state.lastCompletedDate === today()){
+      lab = label("Room " + ROMAN[done], "Opens tomorrow");
+      para(lab, "Today's star is already earned. The next curtain rises tomorrow.");
+    } else {
+      lab = label("Room " + ROMAN[done], done === 0 ? "The first room awaits" : "The next room awaits");
+      if (curator){
+        para(lab, "Today's challenge is behind this curtain. Once it's open, it's yours to finish.");
+        const btn = el("button","btn", busy ? "Opening…" : "Open the curtain"); btn.disabled = busy;
+        btn.onclick = revealNext; lab.appendChild(btn);
+      } else para(lab, "Only Mahan can open this curtain.");
+    }
+    if (open){ if (justRevealed){ justRevealed = false; requestAnimationFrame(() => requestAnimationFrame(() => art.classList.add("open"))); } else art.classList.add("open"); }
+    art.appendChild(lab);
+    b.appendChild(art);
+    const posts = el("div","posts");
+    posts.innerHTML = '<div class="p"></div><div class="p"></div><svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="rope" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A2A3A"/><stop offset=".5" stop-color="#5E1220"/><stop offset="1" stop-color="#2E0710"/></linearGradient></defs><path d="M0 4 Q50 44 100 4" stroke="rgba(0,0,0,.45)" stroke-width="4" fill="none" transform="translate(0 3)" vector-effect="non-scaling-stroke" style="stroke-width:9px"/><path d="M0 4 Q50 44 100 4" stroke="url(#rope)" fill="none" vector-effect="non-scaling-stroke" style="stroke-width:7px;stroke-linecap:round"/></svg>';
+    b.appendChild(posts);
+    return b;
+  }
+  function workBay(i){
+    const w = works[i];
+    const b = lit(el("div","bay")); b.dataset.room = "w" + i;
+    const img = el("img"); img.src = w.url; img.alt = "Room " + ROMAN[i] + ": " + CH[i]; img.loading = "lazy";
+    const art = framed(img, { button: true });
+    if (typeof w.ratio === "number") shapeArt(art, w.ratio);
+    else img.addEventListener("load", () => { if (img.naturalWidth) shapeArt(art, img.naturalWidth / img.naturalHeight); }, { once: true });
+    art.setAttribute("aria-label", "Look closer at room " + ROMAN[i] + ", " + CH[i]);
+    art.onclick = e => { if (e.target.closest(".label")) return; openLightbox(i); };
+    art.classList.add("work"); b.classList.add("kbay");
+    b.appendChild(art);
+    const k = el("button","kiosk"); k.setAttribute("aria-label","About room " + ROMAN[i] + ", " + CH[i]);
+    k.onclick = () => openLightbox(i);
+    const panel = el("div","panel"), inner = el("div","inner");
+    inner.appendChild(el("div","k","ROOM " + ROMAN[i] + " OF " + ROMAN[TOTAL-1]));
+    inner.appendChild(el("div","t", CH[i]));
+    inner.appendChild(el("div","rule"));
+    inner.appendChild(el("p","mline","Mahan. Ink on paper" + (w.createdAt ? ", " + fmtDate(w.createdAt) : "")));
+    const words = noteOf(w);
+    if (words || curator){
+      inner.appendChild(el("div","wlab","IN THE ARTIST'S WORDS"));
+      inner.appendChild(el("p","words" + (words ? "" : " empty"), words ? "“" + words + "”" : "Add your thoughts about this piece."));
+    }
+    const dl = el("dl");
+    const row = (a, v) => { dl.appendChild(el("dt",null,a)); dl.appendChild(el("dd",null,v)); };
+    row("Artist", "Mahan");
+    row("Medium", "Ink on paper");
+    row("Challenge", "Inktober 2026, no. " + (i+1));
+    if (w.createdAt) row("Hung", fmtDate(w.createdAt));
+    inner.appendChild(dl);
+    inner.appendChild(el("div","more","READ MORE AND VISITORS' NOTES"));
+    panel.appendChild(inner);
+    k.append(panel, el("div","post"), el("div","foot"));
+    b.appendChild(k);
+    return b;
+  }
+  function noteOf(w){ return (typeof w.note === "string" && w.note) || (typeof w.caption === "string" && w.caption) || ""; }
+  function sealedBay(i, done){
+    const b = lit(el("div","bay")); b.dataset.room = "s" + i;
+    const box = el("div"); box.style.cssText = "position:absolute;inset:0";
+    box.appendChild(velvet());
+    const br = el("div","brass"); br.appendChild(el("span",null,"ROOM")); br.appendChild(el("b",null,ROMAN[i])); box.appendChild(br);
+    const art = framed(box);
+    let lab;
+    if (i === done){
+      const inProg = state.revealed >= done;
+      lab = label("Room " + ROMAN[i], inProg ? "Curtain drawn" : "Next in line");
+      para(lab, inProg ? "This room is open now. Its drawing is on the way." : "The next curtain to rise.");
+    } else {
+      const wait = i - done;
+      lab = label("Room " + ROMAN[i], "Sealed");
+      para(lab, wait === 1 ? "Opens after the next room is finished." : "Opens after " + wait + " more rooms are finished.");
+    }
+    art.appendChild(lab); b.appendChild(art);
+    return b;
+  }
+  function noticeBay(t, p, key){
+    const b = el("div","bay"); if (key) b.dataset.s = key;
+    b.append(el("div","pool"), el("div","fixture"));
+    const n = el("div","notice"); n.appendChild(el("div","t",t)); n.appendChild(el("p",null,p)); b.appendChild(n);
+    return b;
+  }
+  function artistBay(){
+    if (!artist.photoId && !artist.bio && !curator) return null;
+    const b = lit(el("div","bay")); b.dataset.room = "artist";
+    let content;
+    if (artist.photoId){ content = el("img"); content.src = artist.url; content.alt = "Portrait of Mahan"; }
+    else content = el("div","silhouette");
+    const art = framed(content); art.classList.add("portrait");
+    const lab = el("div","label");
+    lab.appendChild(el("div","k","The artist"));
+    lab.appendChild(el("div","sig","Mahan"));
+    if (artist.bio && bioDraft === null) para(lab, artist.bio, "cap");
+    if (curator){
+      if (bioDraft !== null){
+        const ta = el("textarea"); ta.maxLength = 280; ta.value = bioDraft; ta.placeholder = "A few words about you and your art";
+        ta.oninput = () => { bioDraft = ta.value; };
+        const row = el("div","row2");
+        const save = el("button","btn","Save"); save.onclick = saveBio;
+        const cancel = el("button","btn soft","Cancel"); cancel.onclick = () => { bioDraft = null; render(); };
+        row.append(save, cancel); lab.append(ta, row);
+      } else {
+        if (!artist.bio) para(lab, "Add a portrait and a few words so visitors meet the artist first.");
+        const row = el("div","row2");
+        const ph = el("button","btn", busy ? "Hanging…" : (artist.photoId ? "Change portrait" : "Add portrait")); ph.disabled = busy;
+        ph.onclick = () => { $("file").dataset.mode = "portrait"; $("file").click(); };
+        const ed = el("button","btn soft", artist.bio ? "Edit words" : "Add words"); ed.onclick = () => { bioDraft = artist.bio || ""; render(); };
+        row.append(ph, ed); lab.appendChild(row);
+      }
+    }
+    art.appendChild(lab); b.appendChild(art);
+    return b;
+  }
+  async function saveBio(){
+    if (!db) return;
+    const bio = (bioDraft || "").trim().slice(0, 280);
+    try { const { error } = await sb.from("artist").update({ bio }).eq("id", 1); if (error) throw error; artist.bio = bio; bioDraft = null; toast("Saved to the artist wall."); }
+    catch(e){ toast("That didn't save. Try again."); }
+    render();
+  }
+  let vbDocs = [], vbUnsub = null, vbBlocked = false, vbNames = {};
+  function bookBay(){
+    const b = lit(el("div","bay")); b.dataset.room = "book";
+    b.append(el("div","desk"), el("div","stand"));
+    const book = el("button","book"); book.setAttribute("aria-label","Open the visitors' book");
+    const l = el("div","page l"); l.appendChild(el("div","bt","Visitors' Book")); l.appendChild(el("div","bs","The Mahan Museum"));
+    l.appendChild(el("div","bc", vbDocs.length === 1 ? "1 SIGNATURE" : vbDocs.length + " SIGNATURES"));
+    const r = el("div","page r"); r.appendChild(el("div","lines"));
+    const last = vbDocs.slice(-3).reverse();
+    if (!last.length){ const e = el("p","en","The first page is still blank."); r.appendChild(e); }
+    last.forEach(n => { r.appendChild(el("p","en","“" + n.text + "”")); r.appendChild(el("p","ew", whoOf(n) + (n.createdAt ? ", " + fmtDate(n.createdAt) : ""))); });
+    book.append(l, r); book.onclick = openBook; b.appendChild(book);
+    const cta = el("button","btn bookcta","Sign the book"); cta.onclick = openBook; b.appendChild(cta);
+    return b;
+  }
+  function whoOf(n){ return n.name || "A visitor"; }
+  function savedName(){ try { return localStorage.getItem("mm-name") || ""; } catch(_){ return ""; } }
+  function keepName(v){ try { localStorage.setItem("mm-name", v); } catch(_){} }
+  async function loadBook(){
+    if (!sb) return;
+    const { data, error } = await sb.from("visitor_book").select("id,name,body,created_at").order("created_at").limit(500);
+    if (error) return;
+    vbDocs = data.map(r => ({ id: r.id, name: r.name, text: r.body, createdAt: r.created_at }));
+    render(); if ($("lb").open && $("lb").dataset.kind === "book") fillBook();
+  }
+  function openBook(){
+    const dlg = $("lb"); dlg.innerHTML = ""; dlg.dataset.kind = "book";
+    dlg.appendChild(el("div","vb")); fillBook();
+    dlg.onclick = e => { if (e.target === dlg) dlg.close(); };
+    dlg.onclose = () => { dlg.dataset.kind = ""; };
+    dlg.showModal(); dlg.scrollTop = 0;
+  }
+  function fillBook(){
+    const vb = $("lb").querySelector(".vb"); if (!vb) return;
+    const keepText = vb.querySelector("textarea") ? vb.querySelector("textarea").value : "";
+    vb.innerHTML = "";
+    vb.appendChild(el("h3",null,"Visitors' Book"));
+    vb.appendChild(el("div","sub","THE MAHAN MUSEUM, INKTOBER 2026"));
+    if (!sb) vb.appendChild(el("p","note","The book can't be reached right now."));
+    else {
+      const f = el("form");
+      const nm = el("input","vbname"); nm.maxLength = 40; nm.placeholder = "Your name"; nm.value = savedName(); nm.setAttribute("aria-label","Your name"); nm.autocomplete = "name";
+      const ta = el("textarea"); ta.maxLength = 400; ta.placeholder = "Write a few words for Mahan"; ta.value = keepText; ta.setAttribute("aria-label","Your words");
+      const s = el("button","btn","Sign the book"); s.type = "submit";
+      const r = el("div","row"); r.appendChild(s); f.append(nm, ta, r);
+      f.onsubmit = async e => {
+        e.preventDefault(); const text = ta.value.trim(), name = nm.value.trim();
+        if (!name){ nm.focus(); toast("Add your name first."); return; }
+        if (!text) return; s.disabled = true;
+        const { error } = await sb.from("visitor_book").insert({ name, body: text });
+        if (error) toast("Your words didn't go through. Try again.");
+        else { keepName(name); ta.value = ""; chime(0.5); toast("Thank you for signing."); await loadBook(); }
+        s.disabled = false;
+      };
+      vb.appendChild(f);
+    }
+    if (!vbDocs.length) vb.appendChild(el("p","none","No one has signed yet."));
+    const ol = el("ol");
+    vbDocs.slice().reverse().forEach(n => {
+      const li = el("li"); li.appendChild(el("p",null,"“" + n.text + "”"));
+      const sm = el("small"); sm.appendChild(el("span",null, whoOf(n) + (n.createdAt ? ", " + fmtDate(n.createdAt) : "")));
+      if (curator){ const rm = el("button",null,"Remove"); rm.onclick = async () => { const { error } = await sb.from("visitor_book").delete().eq("id", n.id); if (error) toast("That entry couldn't be removed."); else loadBook(); }; sm.appendChild(rm); }
+      li.appendChild(sm); ol.appendChild(li);
+    });
+    vb.appendChild(ol);
+    const r = el("div","row"); const c = el("button","btn","Close the book"); c.onclick = () => $("lb").close(); r.appendChild(c); vb.appendChild(r);
+  }
+  function endBay(){
+    const b = el("div","bay end"); b.append(el("div","pool"), el("div","sheen"));
+    const ins = el("div","inscription");
+    ins.appendChild(el("div","k","End of the exhibition"));
+    ins.appendChild(el("h1",null,"MAHAN"));
+    ins.appendChild(el("p","sub","Thank you for walking through."));
+    const back = el("button","btn line","Back to the entrance"); back.onclick = () => goTo("entrance");
+    const a = el("div","actions"); a.appendChild(back); ins.appendChild(a);
+    b.appendChild(ins);
+    return b;
+  }
+  function certificateBay(done){
+    const b = lit(el("div","bay end")); b.dataset.room = "certificate";
+    const wrap = el("div","certwrap");
+    const doc = el("div","certdoc");
+    doc.appendChild(el("div","ck","THE MAHAN MUSEUM"));
+    doc.appendChild(el("div","ct","Certificate of Completion"));
+    doc.appendChild(el("div","cs","Mahan"));
+    doc.appendChild(el("div","cp","for drawing and hanging all " + TOTAL + " rooms of Inktober 2026"));
+    doc.appendChild(el("div","seal","M"));
+    wrap.appendChild(doc);
+    if (done < TOTAL){ const s = el("div","sash"); s.appendChild(el("div",null,"AWARDED AT ROOM " + ROMAN[TOTAL-1])); wrap.appendChild(s); }
+    const art = framed(wrap); art.classList.add("cert");
+    const lab = label("The final wall", done >= TOTAL ? "Awarded" : "Not yet awarded");
+    if (done >= TOTAL){
+      para(lab, "Every room is hung. This certificate is yours to keep.");
+      if (downloads){ const d = el("button","btn","Download certificate"); d.onclick = downloadCert; lab.appendChild(d); }
+    } else {
+      para(lab, (TOTAL - done) === 1 ? "One more room and this certificate is Mahan's." : (TOTAL - done) + " rooms to go before this certificate is Mahan's.");
+    }
+    const back = el("button","btn soft","Back to the entrance"); back.style.marginLeft = done >= TOTAL && downloads ? "6px" : "0"; back.onclick = () => goTo("entrance");
+    lab.appendChild(back);
+    art.appendChild(lab); b.appendChild(art);
+    return b;
+  }
+  async function downloadCert(){
+    if (!downloads) return;
+    try {
+      await Promise.all([document.fonts.load('300 80px "Cormorant Garamond"'), document.fonts.load('80px "Pinyon Script"'), document.fonts.load('500 30px Jost')]);
+      const W = 2400, H = 1760, c = document.createElement("canvas"); c.width = W; c.height = H; const x = c.getContext("2d");
+      const g = x.createRadialGradient(W/2, H*.4, 100, W/2, H*.4, W*.7); g.addColorStop(0,"#FFFDF8"); g.addColorStop(1,"#EFE5D2");
+      x.fillStyle = g; x.fillRect(0,0,W,H);
+      const gold = x.createLinearGradient(0,0,W,H); gold.addColorStop(0,"#7A6232"); gold.addColorStop(.3,"#EEDDB0"); gold.addColorStop(.6,"#C6A76A"); gold.addColorStop(1,"#4E3D1D");
+      x.strokeStyle = gold; x.lineWidth = 36; x.strokeRect(18,18,W-36,H-36);
+      x.strokeStyle = "#B79C6E"; x.lineWidth = 3; x.strokeRect(110,110,W-220,H-220); x.lineWidth = 1.5; x.strokeRect(128,128,W-256,H-256);
+      x.textAlign = "center"; x.fillStyle = "#8A7358"; x.font = '500 40px Jost';
+      if ("letterSpacing" in x) x.letterSpacing = "14px";
+      x.fillText("THE MAHAN MUSEUM", W/2, 380);
+      if ("letterSpacing" in x) x.letterSpacing = "0px";
+      x.fillStyle = "#3A0D16"; x.font = '300 150px "Cormorant Garamond"'; x.fillText("Certificate of Completion", W/2, 600);
+      x.fillStyle = "#5C1824"; x.font = '260px "Pinyon Script"'; x.fillText("Mahan", W/2, 930);
+      x.fillStyle = "#6E5A50"; x.font = 'italic 300 70px "Cormorant Garamond"';
+      x.fillText("for drawing and hanging all " + TOTAL + " rooms of Inktober 2026", W/2, 1090);
+      const star = (cx, cy, r) => { x.beginPath(); for (let k=0;k<10;k++){ const a = -Math.PI/2 + k*Math.PI/5, rr = k%2 ? r*.45 : r; x.lineTo(cx + rr*Math.cos(a), cy + rr*Math.sin(a)); } x.closePath(); x.fill(); };
+      x.fillStyle = "#C6A76A"; const sp = 74, sx = W/2 - (TOTAL-1)*sp/2; for (let k=0;k<TOTAL;k++) star(sx + k*sp, 1250, 26);
+      const last = works[TOTAL-1] && works[TOTAL-1].createdAt ? new Date(works[TOTAL-1].createdAt) : new Date();
+      x.fillStyle = "#8A7358"; x.font = 'italic 400 54px "Cormorant Garamond"'; x.fillText(last.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}), W/2, 1420);
+      const sg = x.createRadialGradient(W-420, H-400, 10, W-400, H-380, 150); sg.addColorStop(0,"#B8354A"); sg.addColorStop(.6,"#6E1424"); sg.addColorStop(1,"#3E0A14");
+      x.fillStyle = sg; x.beginPath(); x.arc(W-400, H-380, 140, 0, Math.PI*2); x.fill();
+      x.fillStyle = "#F0D9A8"; x.font = '400 120px "Cormorant Garamond"'; x.fillText("M", W-400, H-340);
+      const blob = await new Promise(r => c.toBlob(r, "image/png"));
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "Mahan Museum Certificate.png";
+      document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+    } catch(e){ if (!e || e.code !== "declined") toast("The certificate couldn't be saved here."); }
+  }
+
+  function render(){
+    const done = doneCount();
+    const keep = corridor.scrollLeft;
+    track.innerHTML = "";
+    track.append(el("div","ceil"), el("div","wall"), el("div","skirt"), el("div","floor"));
+    track.appendChild(entranceBay(done));
+    const ab = artistBay(); if (ab) track.appendChild(ab);
+    track.appendChild(doorBay("challenge","The first wing","The Challenge"));
+    track.appendChild(challengeBay(done));
+    track.appendChild(doorBay("collection","The second wing","The Collection"));
+    if (done === 0) track.appendChild(noticeBay("The walls are waiting", curator ? "Your first drawing will hang here once Room I is finished." : "Mahan's first drawing will hang here once Room I is finished."));
+    else for (let i = 0; i < done; i++) track.appendChild(workBay(i));
+    track.appendChild(doorBay("curtains","The third wing","The Curtains"));
+    if (done >= TOTAL) track.appendChild(noticeBay("Every curtain is open","Nothing is left behind the velvet."));
+    else for (let i = done; i < TOTAL; i++) track.appendChild(sealedBay(i, done));
+    track.appendChild(bookBay());
+    track.appendChild(done >= TOTAL ? certificateBay(done) : endBay());
+    corridor.scrollLeft = keep;
+
+    const st = $("starsTop"); st.innerHTML = "";
+    st.appendChild(stars(done, "row"));
+    st.appendChild(el("span","num", done + " / " + TOTAL));
+    st.setAttribute("aria-label", done + " of " + TOTAL + " stars");
+    $("n-ch").textContent = done >= TOTAL ? "" : ROMAN[done];
+    $("n-col").textContent = done ? String(done) : "";
+    $("n-cur").textContent = done >= TOTAL ? "" : String(TOTAL - done);
+    onScroll();
+  }
+
+  function sectionStart(key){ const b = track.querySelector('.bay[data-s="' + key + '"]'); return b ? b.offsetLeft : 0; }
+  function goTo(key){
+    let target;
+    if (key === "entrance") target = 0;
+    else {
+      const door = track.querySelector('.bay[data-s="' + key + '"]');
+      const next = door && door.nextElementSibling;
+      target = next ? next.offsetLeft + next.offsetWidth/2 - corridor.clientWidth/2 : sectionStart(key);
+    }
+    corridor.scrollTo({ left: Math.max(0, target), behavior: reduced ? "auto" : "smooth" });
+  }
+  document.querySelectorAll(".tab").forEach(t => t.onclick = () => goTo(t.dataset.s));
+
+  let ticking = false;
+  function onScroll(){
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      const x = corridor.scrollLeft, max = corridor.scrollWidth - corridor.clientWidth, mid = x + corridor.clientWidth/2;
+      $("progress").style.width = (max > 0 ? (x / max) * 100 : 0) + "%";
+      $("prev").classList.toggle("hide", x < 10);
+      $("next").classList.toggle("hide", max - x < 10);
+      let active = "entrance";
+      ["challenge","collection","curtains"].forEach(k => { if (mid >= sectionStart(k)) active = k; });
+      document.querySelectorAll(".tab").forEach(t => { const on = t.dataset.s === active; t.classList.toggle("active", on); t.setAttribute("aria-current", on ? "true" : "false"); });
+    });
+  }
+  corridor.addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  corridor.addEventListener("wheel", e => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){ corridor.scrollLeft += e.deltaY * 1.1; e.preventDefault(); }
+  }, { passive: false });
+  function step(dir){
+    const bays = [...track.querySelectorAll(".bay")];
+    const mid = corridor.scrollLeft + corridor.clientWidth/2;
+    let idx = bays.findIndex(b => b.offsetLeft + b.offsetWidth > mid);
+    idx = Math.min(bays.length - 1, Math.max(0, idx + dir));
+    const b = bays[idx];
+    corridor.scrollTo({ left: b.offsetLeft + b.offsetWidth/2 - corridor.clientWidth/2, behavior: reduced ? "auto" : "smooth" });
+  }
+  $("prev").onclick = () => step(-1); $("next").onclick = () => step(1);
+  addEventListener("keydown", e => { if ($("lb").open || e.target.tagName === "INPUT") return; if (e.key === "ArrowRight") step(1); if (e.key === "ArrowLeft") step(-1); });
+
+  function openLightbox(i){
+    const w = works[i]; if (!w) return;
+    const dlg = $("lb"); dlg.innerHTML = ""; dlg.dataset.kind = "work";
+    const box = el("div","lb");
+    const img = el("img"); img.src = w.url; img.alt = CH[i];
+    const fr = el("div","lbf"), mt = el("div","lbm"); mt.appendChild(img); fr.appendChild(mt);
+    box.appendChild(fr);
+    const lab = label("Room " + ROMAN[i], CH[i]);
+    const meta = () => para(lab, "Mahan. Ink on paper" + (w.createdAt ? ", " + fmtDate(w.createdAt) : "") + ".");
+    const showWords = () => {
+      lab.querySelectorAll(".wlab,.words,p,textarea,.row2").forEach(n => n.remove());
+      const words = noteOf(w);
+      if (words || curator){ lab.appendChild(el("div","wlab","IN THE ARTIST'S WORDS")); para(lab, words || "Nothing written yet.", "words full" + (words ? "" : " empty")); }
+      meta();
+      if (curator){
+        const ed = el("button","btn soft", words ? "Edit your words" : "Write your words");
+        ed.onclick = () => {
+          lab.querySelectorAll(".words,p,.btn").forEach(n => n.remove());
+          const ta = el("textarea","big"); ta.maxLength = 600; ta.value = words; ta.placeholder = "Your thoughts on this piece";
+          const r2 = el("div","row2"); r2.style.justifyContent = "center";
+          const sv = el("button","btn","Save"), cx = el("button","btn soft","Cancel");
+          sv.onclick = async () => { sv.disabled = true; try { const { error } = await sb.from("works").update({ note: ta.value.trim().slice(0,600) }).eq("idx", i); if (error) throw error; w.note = ta.value.trim().slice(0,600); toast("Your words are on the wall."); showWords(); } catch(e){ toast("That didn't save. Try again."); sv.disabled = false; } };
+          cx.onclick = showWords;
+          r2.append(sv, cx); lab.append(ta, r2); ta.focus();
+        };
+        lab.appendChild(ed);
+      }
+    };
+    showWords();
+    box.appendChild(lab);
+    const row = el("div","row");
+    if (curator){
+      const r = el("button","btn line","Replace drawing");
+      r.onclick = () => { $("file").dataset.mode = "replace"; $("file").dataset.idx = i; dlg.close(); $("file").click(); };
+      row.appendChild(r);
+    }
+    const c = el("button","btn","Step back"); c.onclick = () => dlg.close(); row.appendChild(c);
+    box.appendChild(row);
+    box.appendChild(guestbook(i));
+    dlg.appendChild(box);
+    dlg.onclick = e => { if (e.target === dlg) dlg.close(); };
+    dlg.onclose = () => {};
+    dlg.showModal();
+    dlg.scrollTop = 0; c.focus({ preventScroll: true });
+  }
+
+  function guestbook(i){
+    const g = el("section","gb"); g.appendChild(el("h3",null,"Notes from visitors"));
+    const list = el("ol"); const empty = el("p","empty","No one has left a note yet. Be the first.");
+    g.append(empty, list);
+    if (!sb) return g;
+    const load = async () => {
+      const { data, error } = await sb.from("guest_notes").select("id,name,body,created_at").eq("idx", i).order("created_at").limit(200);
+      if (error) return;
+      empty.hidden = data.length > 0; list.innerHTML = "";
+      data.forEach(n => {
+        const li = el("li"); li.appendChild(el("p",null,"“" + n.body + "”"));
+        const s = el("small"); s.appendChild(el("span",null, (n.name || "A visitor") + ", " + fmtDate(n.created_at)));
+        if (curator){
+          const rm = el("button",null,"Remove");
+          rm.onclick = async () => { const { error } = await sb.from("guest_notes").delete().eq("id", n.id); if (error) toast("That note couldn't be removed."); else load(); };
+          s.appendChild(rm);
+        }
+        li.appendChild(s); list.appendChild(li);
+      });
+    };
+    load();
+    const f = el("form"); f.className = "gbform";
+    const nm = el("input"); nm.maxLength = 40; nm.placeholder = "Your name"; nm.value = savedName(); nm.setAttribute("aria-label","Your name"); nm.autocomplete = "name";
+    const inp = el("input"); inp.maxLength = 400; inp.placeholder = "Leave a few words"; inp.setAttribute("aria-label","Your note");
+    const send = el("button","btn","Sign"); send.type = "submit";
+    const r2 = el("div","gbrow"); r2.append(inp, send);
+    f.append(nm, r2);
+    f.onsubmit = async e => {
+      e.preventDefault(); const body = inp.value.trim(), name = nm.value.trim();
+      if (!name){ nm.focus(); toast("Add your name first."); return; }
+      if (!body) return;
+      send.disabled = true;
+      const { error } = await sb.from("guest_notes").insert({ idx: i, name, body });
+      if (error) toast("Your note didn't go through. Try again.");
+      else { keepName(name); inp.value = ""; chime(0.5); await load(); }
+      send.disabled = false;
+    };
+    g.appendChild(f);
+    return g;
+  }
+
+  /* Sound */
+  let actx = null, amb = null, soundOn = false;
+  function ctx(){ if (!actx){ const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; actx = new A(); } if (actx.state === "suspended") actx.resume(); return actx; }
+  function startAmbient(){
+    const a = ctx(); if (!a) return;
+    const master = a.createGain(); master.gain.value = 0; master.connect(a.destination);
+    const lp = a.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 900; lp.connect(master);
+    const oscs = [110, 164.81, 220, 277.18, 329.63].map((f, k) => {
+      const o = a.createOscillator(); o.type = k % 2 ? "sine" : "triangle"; o.frequency.value = f; o.detune.value = (k - 2) * 4;
+      const g = a.createGain(); g.gain.value = 0.05 / (k + 1);
+      const l = a.createOscillator(); l.frequency.value = 0.05 + k * 0.03; const lg = a.createGain(); lg.gain.value = 0.02 / (k + 1);
+      l.connect(lg); lg.connect(g.gain); o.connect(g); g.connect(lp); o.start(); l.start(); return [o, l];
+    }).flat();
+    const len = a.sampleRate * 2, buf = a.createBuffer(1, len, a.sampleRate), d = buf.getChannelData(0);
+    let last = 0; for (let k = 0; k < len; k++){ last = (last + 0.02 * (Math.random()*2 - 1)) / 1.02; d[k] = last * 3; }
+    const n = a.createBufferSource(); n.buffer = buf; n.loop = true; const ng = a.createGain(); ng.gain.value = 0.05; n.connect(ng); ng.connect(master); n.start();
+    master.gain.linearRampToValueAtTime(0.5, a.currentTime + 2.5);
+    amb = { master, nodes: [...oscs, n] };
+  }
+  function stopAmbient(){
+    if (!amb || !actx) return; const m = amb, t = actx.currentTime;
+    m.master.gain.cancelScheduledValues(t); m.master.gain.setValueAtTime(m.master.gain.value, t); m.master.gain.linearRampToValueAtTime(0, t + 1);
+    setTimeout(() => m.nodes.forEach(o => { try { o.stop(); } catch(_){} }), 1200); amb = null;
+  }
+  function chime(level){
+    if (!soundOn) return; const a = ctx(); if (!a) return; const t = a.currentTime;
+    [1318.5, 1760, 2637].forEach((f, k) => { const o = a.createOscillator(), g = a.createGain(); o.frequency.value = f; o.type = "sine";
+      g.gain.setValueAtTime(0, t + k*0.09); g.gain.linearRampToValueAtTime((level || 1) * 0.12 / (k+1), t + k*0.09 + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + k*0.09 + 1.6);
+      o.connect(g); g.connect(a.destination); o.start(t + k*0.09); o.stop(t + k*0.09 + 1.7); });
+  }
+  function swoosh(){
+    if (!soundOn) return; const a = ctx(); if (!a) return; const t = a.currentTime, len = a.sampleRate * 1.6;
+    const buf = a.createBuffer(1, len, a.sampleRate), d = buf.getChannelData(0); for (let k = 0; k < len; k++) d[k] = Math.random()*2 - 1;
+    const s = a.createBufferSource(); s.buffer = buf; const f = a.createBiquadFilter(); f.type = "bandpass"; f.Q.value = 0.8;
+    f.frequency.setValueAtTime(300, t); f.frequency.exponentialRampToValueAtTime(1400, t + 1.4);
+    const g = a.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.12, t + 0.4); g.gain.linearRampToValueAtTime(0, t + 1.6);
+    s.connect(f); f.connect(g); g.connect(a.destination); s.start(t);
+  }
+  $("snd").onclick = () => {
+    soundOn = !soundOn; $("snd").setAttribute("aria-pressed", String(soundOn));
+    $("sndwave").setAttribute("opacity", soundOn ? "1" : ".35");
+    if (soundOn) startAmbient(); else stopAmbient();
+  };
+
+  /* Star moment */
+  function celebrate(i){
+    chime(1);
+    const target = $("starsTop").querySelectorAll(".row svg")[i];
+    if (!target) return;
+    if (reduced || !Element.prototype.animate){ target.classList.add("pop"); return; }
+    const s = document.createElementNS("http://www.w3.org/2000/svg","svg");
+    s.setAttribute("viewBox","0 0 24 24"); s.setAttribute("class","flystar"); s.innerHTML = STAR;
+    const cx = innerWidth/2 - 32, cy = innerHeight*0.42 - 32;
+    s.style.left = cx + "px"; s.style.top = cy + "px"; document.body.appendChild(s);
+    for (let k = 0; k < 14; k++){
+      const p = el("div","spark"); p.style.left = (cx + 29) + "px"; p.style.top = (cy + 29) + "px"; document.body.appendChild(p);
+      const ang = (k / 14) * Math.PI * 2, dist = 70 + Math.random()*60;
+      p.animate([{ transform: "translate(0,0) scale(1)", opacity: 1 }, { transform: "translate(" + Math.cos(ang)*dist + "px," + Math.sin(ang)*dist + "px) scale(.2)", opacity: 0 }], { duration: 900 + Math.random()*300, delay: 350, easing: "cubic-bezier(.2,.7,.3,1)", fill: "forwards" }).onfinish = () => p.remove();
+    }
+    const r = target.getBoundingClientRect();
+    const dx = r.left + r.width/2 - (cx + 32), dy = r.top + r.height/2 - (cy + 32), sc = r.width / 64;
+    s.animate([
+      { transform: "translate(0,0) scale(0) rotate(-90deg)", opacity: 0 },
+      { transform: "translate(0,0) scale(1.5) rotate(0deg)", opacity: 1, offset: .3 },
+      { transform: "translate(0,0) scale(1.2) rotate(0deg)", opacity: 1, offset: .5 },
+      { transform: "translate(" + dx + "px," + dy + "px) scale(" + sc + ") rotate(144deg)", opacity: 1 }
+    ], { duration: 2000, easing: "cubic-bezier(.6,0,.3,1)", fill: "forwards" }).onfinish = () => { s.remove(); target.classList.add("pop"); };
+  }
+
+  async function revealNext(){
+    if (busy || !db) return; busy = true; render();
+    const { error } = await sb.rpc("reveal_next");
+    if (error){
+      const m = error.message || "";
+      toast(m.includes("come_back_tomorrow") ? "Today's star is already earned. Come back tomorrow." : m.includes("not_curator") ? "Only the curator can open the curtain." : "The curtain didn't open. Check your connection and try again.");
+      busy = false; render(); return;
+    }
+    justRevealed = true; swoosh();
+    busy = false; await loadAll();
+  }
+  let lastRatio = null;
+  async function prepare(file){
+    try {
+      const bmp = await createImageBitmap(file);
+      lastRatio = bmp.width / bmp.height;
+      const s = Math.min(1, 2400 / Math.max(bmp.width, bmp.height));
+      if (s === 1 && file.size < 8e6) return file;
+      const c = document.createElement("canvas"); c.width = Math.round(bmp.width*s); c.height = Math.round(bmp.height*s);
+      const x = c.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0,0,c.width,c.height); x.drawImage(bmp,0,0,c.width,c.height);
+      return await new Promise(r => c.toBlob(r, "image/jpeg", 0.9));
+    } catch(e){ return file; }
+  }
+  function publicUrl(path){ return path ? sb.storage.from("art").getPublicUrl(path).data.publicUrl : null; }
+  async function putImage(blob, folder){
+    const ext = (blob.type || "").includes("png") ? "png" : "jpg";
+    const path = folder + "/" + Date.now() + "-" + Math.random().toString(36).slice(2, 8) + "." + ext;
+    const { error } = await sb.storage.from("art").upload(path, blob, { contentType: blob.type || "image/jpeg", upsert: false });
+    if (error) throw error;
+    return path;
+  }
+  $("file").addEventListener("change", async e => {
+    const f = e.target.files[0]; e.target.value = "";
+    if (!f || !curator || !sb || busy) return;
+    const mode = e.target.dataset.mode;
+    busy = true; render();
+    let path = null;
+    try {
+      lastRatio = null;
+      const blob = await prepare(f);
+      const ratio = lastRatio ? Math.round(lastRatio * 10000) / 10000 : null;
+      if (mode === "portrait"){
+        path = await putImage(blob, "artist");
+        const old = artist.photoId;
+        const { error } = await sb.from("artist").update({ photo_path: path }).eq("id", 1); if (error) throw error;
+        if (old) sb.storage.from("art").remove([old]);
+        toast("Your portrait is on the wall.");
+      } else if (mode === "replace"){
+        const i = Number(e.target.dataset.idx), old = works[i];
+        path = await putImage(blob, "rooms");
+        const { error } = await sb.from("works").update({ image_path: path, ratio }).eq("idx", i); if (error) throw error;
+        if (old && old.path) sb.storage.from("art").remove([old.path]);
+        toast("Room " + ROMAN[i] + " has a new drawing.");
+      } else {
+        path = await putImage(blob, "rooms");
+        const { data, error } = await sb.rpc("hang_work", { p_path: path, p_ratio: ratio, p_note: capDraft.trim() });
+        if (error) throw error;
+        const i = typeof data === "number" ? data : doneCount();
+        capDraft = "";
+        busy = false; await loadAll();
+        toast("Hung in Room " + ROMAN[i] + ". A new star is yours.");
+        celebrate(i);
+        const b = track.querySelector('.bay[data-room="w' + i + '"]');
+        if (b) corridor.scrollTo({ left: b.offsetLeft + b.offsetWidth/2 - corridor.clientWidth/2, behavior: reduced ? "auto" : "smooth" });
+        return;
+      }
+      busy = false; await loadAll(); return;
+    } catch(err){
+      if (path && mode === "new") sb.storage.from("art").remove([path]);
+      const m = (err && (err.message || err.error)) || "";
+      toast(m.includes("curtain_closed") ? "Open the curtain before hanging a drawing." : /size|large/i.test(m) ? "That picture is too large. Try a smaller one." : "The drawing wasn't hung. Try again.");
+    }
+    busy = false; render();
+  });
+
+  /* Curator sign-in */
+  $("key").onclick = () => {
+    const dlg = $("lb"); dlg.innerHTML = ""; dlg.dataset.kind = "login";
+    const box = el("div","vb login");
+    box.appendChild(el("h3",null,"Curator's entrance"));
+    if (session){
+      box.appendChild(el("div","sub", curator ? "SIGNED IN AS CURATOR" : "SIGNED IN"));
+      box.appendChild(el("p","note", (session.user && session.user.email ? session.user.email : "") + (curator ? "" : ". This email isn't on the curator list.")));
+      const r = el("div","row");
+      const out = el("button","btn","Sign out"); out.onclick = async () => { await sb.auth.signOut(); dlg.close(); };
+      const c = el("button","btn line","Close"); c.style.color = "#3A0D16"; c.onclick = () => dlg.close();
+      r.append(out, c); box.appendChild(r);
+    } else {
+      box.appendChild(el("div","sub","FOR MAHAN ONLY"));
+      box.appendChild(el("p","note","Enter your email and we'll send you a link. Open it on this device to come back signed in."));
+      const f = el("form"); const em = el("input","vbname"); em.type = "email"; em.required = true; em.placeholder = "Your email"; em.autocomplete = "email";
+      const s = el("button","btn","Send my link"); s.type = "submit";
+      const r = el("div","row"); r.appendChild(s); f.append(em, r);
+      f.onsubmit = async e => {
+        e.preventDefault(); s.disabled = true;
+        const { error } = await sb.auth.signInWithOtp({ email: em.value.trim(), options: { emailRedirectTo: location.origin + location.pathname, shouldCreateUser: true } });
+        s.disabled = false;
+        if (error){ toast(/rate|seconds/i.test(error.message) ? "Please wait a minute before asking for another link." : "The link couldn't be sent. Check the email and try again."); return; }
+        f.replaceWith(el("p","note","Check your inbox for the link. It can take a minute to arrive."));
+      };
+      box.appendChild(f);
+    }
+    dlg.appendChild(box);
+    dlg.onclick = ev => { if (ev.target === dlg) dlg.close(); };
+    dlg.showModal();
+  };
+
+  async function loadAll(){
+    try {
+      const [st, wk, ar, ch, cnt] = await Promise.all([
+        sb.from("museum_state").select("*").eq("id", 1).maybeSingle(),
+        sb.from("works").select("*").order("idx"),
+        sb.from("artist").select("*").eq("id", 1).maybeSingle(),
+        sb.rpc("visible_challenges"),
+        sb.rpc("challenge_count")
+      ]);
+      if (st.error || wk.error) throw st.error || wk.error;
+      const s = st.data || {};
+      state = { revealed: typeof s.revealed === "number" ? s.revealed : -1, lastCompletedDate: s.last_completed_date || null, revealedAt: s.revealed_at || null };
+      if (typeof cnt.data === "number" && cnt.data > 0) TOTAL = Math.min(cnt.data, ROMAN.length);
+      const next = {};
+      (wk.data || []).forEach(w => { if (w.idx >= 0 && w.idx < TOTAL) next[w.idx] = { idx: w.idx, path: w.image_path, url: publicUrl(w.image_path), ratio: w.ratio, note: w.note || "", createdAt: w.created_at }; });
+      works = next;
+      const a = ar.data || {};
+      artist = { photoId: a.photo_path || null, url: publicUrl(a.photo_path), bio: a.bio || "" };
+      CH = {}; (ch.data || []).forEach(r => { CH[r.idx] = r.title; });
+      db = sb; ready = true;
+    } catch(e){
+      if (!ready) db = false;
+    }
+    render();
+  }
+  async function refreshCurator(){
+    curator = false;
+    if (session){ const { data } = await sb.rpc("is_curator"); curator = data === true; }
+    assets = curator ? true : null;
+    $("key").setAttribute("aria-pressed", String(!!session));
+  }
+
+  render();
+
+  (async () => {
+    if (!window.supabase || !window.supabase.createClient){ db = false; render(); return; }
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, flowType: "implicit" } });
+    const { data } = await sb.auth.getSession(); session = data.session || null;
+    await refreshCurator();
+    await Promise.all([loadAll(), loadBook()]);
+    if (location.hash.includes("access_token")) history.replaceState(null, "", location.pathname + location.search);
+    sb.auth.onAuthStateChange(async (ev, s) => {
+      const had = !!session; session = s || null;
+      if (had !== !!session){ await refreshCurator(); await loadAll(); if (session && curator) toast("Welcome back, curator."); }
+    });
+    setInterval(() => { if (!document.hidden && !busy) loadAll(); }, 60000);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden && !busy){ loadAll(); loadBook(); } });
+  })();
+})();
+</script>
+</body>
+</html>
